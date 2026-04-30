@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ti je gjithçka për mua ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #f2789f;
+    --blush: #fcd5ce;
+    --cream: #fff5f7;
+    --deep: #c9456a;
+    --gold: #e8c4a2;
+    --text: #4a2030;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── PETALS CANVAS ── */
+  #petals-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4; pointer-events: none; z-index: 0;
+  }
+
+  /* ── GRADIENT BG ── */
+  .gradient-bg {
+    position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, #ffe4ec 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, #fcd5ce 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, #fff5f7 0%, #fce4ec 100%);
+    animation: bgShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes bgShift {
+    0%   { filter: hue-rotate(0deg) brightness(1); }
+    100% { filter: hue-rotate(8deg) brightness(1.03); }
+  }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--rose);
+    letter-spacing: 0.08em;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 9vw, 7.5rem);
+    line-height: 1.1;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--deep) 0%, var(--rose) 50%, var(--gold) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 1.2s ease forwards 0.7s;
+    margin: 0.4rem 0;
+  }
+
+  .hero-heart {
+    font-size: clamp(3rem, 8vw, 6rem);
+    display: block;
+    opacity: 0; transform: scale(0.5);
+    animation: heartPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1.6s;
+    filter: drop-shadow(0 0 20px rgba(242,120,159,0.6));
+  }
+  @keyframes heartPop {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--rose);
+    max-width: 500px;
+    line-height: 1.7;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 1s ease forwards 2s;
+    margin-top: 1rem;
+  }
+
+  /* ── MUSIC PLAYER ── */
+  .music-bar {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(242,120,159,0.25);
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem;
+    display: flex; align-items: center; gap: 0.7rem;
+    box-shadow: 0 8px 32px rgba(201,69,106,0.15);
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.9rem;
+    color: var(--deep);
+  }
+  .music-bar .note { font-size: 1.1rem; animation: noteBounce 1.2s ease-in-out infinite; }
+  @keyframes noteBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  .play-btn {
+    background: linear-gradient(135deg, var(--rose), var(--deep));
+    border: none; border-radius: 50%;
+    width: 36px; height: 36px;
+    cursor: pointer; color: #fff; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(201,69,106,0.3);
+  }
+  .play-btn:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(201,69,106,0.45); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    text-align: center; padding: 2rem; font-size: 1.6rem;
+    opacity: 0.5; letter-spacing: 0.5rem;
+  }
+
+  /* ── MEMORIES ── */
+  .memories {
+    padding: 4rem 2rem 6rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    text-align: center; color: var(--deep);
+    margin-bottom: 3rem;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .section-title.visible { opacity: 1; transform: translateY(0); }
+
+  .memories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+  }
+  .memory-card {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(242,120,159,0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(201,69,106,0.1);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+    opacity: 0; transform: translateY(30px) scale(0.97);
+    transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.35s ease;
+  }
+  .memory-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+  .memory-card:hover {
+    transform: translateY(-6px) scale(1.02) !important;
+    box-shadow: 0 20px 40px rgba(201,69,106,0.2);
+  }
+
+  .memory-img {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #fcd5ce 0%, #f2789f 100%);
+    position: relative; overflow: hidden;
+  }
+  .memory-img-placeholder {
+    width: 100%; aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--blush), var(--rose));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    position: relative; overflow: hidden;
+  }
+  .memory-img-placeholder::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3));
+  }
+  .memory-body { padding: 1.2rem 1.4rem 1.4rem; }
+  .memory-date {
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.85rem; color: var(--rose);
+    margin-bottom: 0.3rem;
+  }
+  .memory-caption {
+    font-size: 1.05rem; line-height: 1.6; color: var(--text);
+    font-style: italic;
+  }
+
+  /* ── SURPRISE SECTION ── */
+  .surprise-section {
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+  .surprise-btn {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    padding: 1rem 2.8rem;
+    background: linear-gradient(135deg, var(--rose) 0%, var(--deep) 100%);
+    color: #fff; border: none; border-radius: 50px; cursor: pointer;
+    box-shadow: 0 8px 30px rgba(201,69,106,0.35);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    position: relative; overflow: hidden;
+  }
+  .surprise-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .surprise-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 14px 40px rgba(201,69,106,0.5);
+  }
+  .surprise-btn:hover::before { opacity: 1; }
+  .surprise-btn:active { transform: scale(0.97); }
+
+  .surprise-msg {
+    margin-top: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    color: var(--deep);
+    line-height: 1.7;
+    max-width: 620px; margin-left: auto; margin-right: auto;
+    opacity: 0; transform: scale(0.92);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+    padding: 2rem 2.5rem;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(242,120,159,0.25);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(201,69,106,0.12);
+  }
+  .surprise-msg.show {
+    opacity: 1; transform: scale(1);
+    pointer-events: auto;
+  }
+  .surprise-msg .big-heart { font-size: 2rem; display: block; margin-top: 0.8rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 3rem 2rem 5rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem; color: var(--rose);
+    opacity: 0.8;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FLOATING HEARTS (DOM) ── */
+  .heart-float {
+    position: fixed; pointer-events: none; z-index: 2;
+    font-size: 1.4rem;
+    animation: floatUp linear forwards;
+    opacity: 0.7;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.8; }
+    80%  { opacity: 0.5; }
+    100% { transform: translateY(-100vh) rotate(30deg) scale(0.4); opacity: 0; }
+  }
+
+  /* ── PULSE RING on hero heart ── */
+  .pulse-wrap { position: relative; display: inline-block; margin: 0.5rem 0; }
+  .pulse-wrap::after {
+    content: '';
+    position: absolute; inset: -8px;
+    border: 2px solid rgba(242,120,159,0.4);
+    border-radius: 50%;
+    animation: pulseRing 2s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0%   { transform: scale(0.9); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gradient-bg"></div>
+<canvas id="petals-canvas"></canvas>
+
+<!-- MUSIC - SoundCloud Embed (hidden) -->
+<iframe id="sc-player"
+  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/eniennykoci/eni-koci-ft-noizy-je-gjithcka&color=%23f2789f&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"
+  width="1" height="1" frameborder="0" scrolling="no"
+  allow="autoplay"
+  style="position:fixed;opacity:0;pointer-events:none;"></iframe>
+
+<div class="music-bar">
+  <span class="note">🎵</span>
+  <span>Je Gjithçka — Eni Koci ft. Noizy</span>
+  <button class="play-btn" id="playBtn" onclick="toggleMusic()">⏸</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Për ty, gjithmonë kisush  ✦</p>
+  <h1 class="hero-title">Ti je gjithçka<br>për mua</h1>
+  <div class="pulse-wrap">
+    <span class="hero-heart">❤️</span>
+  </div>
+  <p class="hero-sub">
+    Çdo ditë me ty është një faqe e bukur<br>
+    në librin tonë të dashurisë...
+  </p>
+</section>
+
+<div class="divider">✦ · ✦ · ✦</div>
+
+<!-- MEMORIES -->
+<section class="memories">
+  <h2 class="section-title scroll-reveal">Kujtimet tona ✨</h2>
+  <div class="memories-grid">
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.1s">
+   <img src="IMG_7936.jpg" class="memory-img">
+      <div class="memory-body">
+        <p class="memory-date">📅 Takimi ynë i parë ku ti me bere ditlindjen me t lumtur te jetes time</p>
+        <p class="memory-caption">"Ditën që të pashë për herë të parë, zemra ime diti që ti je ajo."</p>
+      </div>
+    </div>
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.2s">
+     <img src="IMG_7942.PNG" class="memory-img">
+      <div class="memory-body">
+        <p class="memory-date">📅 Shëtitja jone nën naten </p>
+        <p class="memory-caption">"Nën qiellin e e mbushur me erresir ishe i vetmi yll qe ndicoje  ndieja se bota ishte vetëm jona."</p>
+      </div>
+    </div>
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.3s">
+       <img src="" class="memory-img">
+      <div class="memory-body">
+        <p class="memory-date">📅 Dita jonë speciale</p>
+        <p class="memory-caption">"Trëndafili i parë që të dhurova — sikur zemra ime në dorën tënde."</p>
+      </div>
+    </div>
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.4s">
+      <div class="memory-img-placeholder">☕</div>
+      <div class="memory-body">
+        <p class="memory-date">📅 Mëngjeset e qeta</p>
+        <p class="memory-caption">"Kafja e mëngjesit ka shije më të mirë kur je pranë meje."</p>
+      </div>
+    </div>
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.5s">
+      <div class="memory-img-placeholder">🎶</div>
+      <div class="memory-body">
+        <p class="memory-date">📅 Kënga jonë</p>
+        <p class="memory-caption">"Sa herë dëgjoj muzikën tonë, buzëqeshja vjen vetvetiu."</p>
+      </div>
+    </div>
+
+    <div class="memory-card scroll-reveal" style="transition-delay:0.6s">
+      <div class="memory-img-placeholder">✨</div>
+      <div class="memory-body">
+        <p class="memory-date">📅 E ardhmja jonë</p>
+        <p class="memory-caption">"Me ty do të ndërtoj çdo ëndërr dhe çdo ditë e bukur që vjen."</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider">✦ · ✦ · ✦</div>
+
+<!-- SURPRISE -->
+<section class="surprise-section">
+  <button class="surprise-btn" onclick="showSurprise()">
+    ✨ Kliko këtu ✨
+  </button>
+  <div class="surprise-msg" id="surpriseMsg">
+    Nuk kam fjalë mjaftueshëm të mira per ty mbase s jam aq perfekt per ty po boten do e bej per syt e tu <br>
+    për të përshkruar se sa shumë do të dua.<br>
+    Por ta di çdo mëngjes që zgjohëm,<br>
+    çdo natë që flemë  ti je mendimi im i parë<br>
+    dhe i fundit te dua shume kisush. <em>Gjithmonë.</em>
+    <span class="big-heart">❤️🌹❤️</span>
+  </div>
+</section>
+
+<footer>
+  Bërë me ❤️ vetëm për ty · Gjithmonë e përgjithmonë qe te plakemi bashk se te du pa mase .
+  Falenderoj zotin qe erdhe ne jeten time 
+</footer>
+
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+  // ── MUSIC (SoundCloud Widget API) ──
+  let scWidget = null;
+  let scPlaying = true;
+
+  window.addEventListener('load', () => {
+    const iframe = document.getElementById('sc-player');
+    if (window.SC && window.SC.Widget) {
+      scWidget = window.SC.Widget(iframe);
+      scWidget.bind(window.SC.Widget.Events.READY, () => {
+        scWidget.setVolume(30);
+        scWidget.play();
+      });
+    }
+  });
+
+  function toggleMusic() {
+    const btn = document.getElementById('playBtn');
+    if (!scWidget) return;
+    if (scPlaying) {
+      scWidget.pause(); scPlaying = false; btn.textContent = '▶';
+    } else {
+      scWidget.play(); scPlaying = true; btn.textContent = '⏸';
+    }
+  }
+
+  // ── SURPRISE ──
+  function showSurprise() {
+    const msg = document.getElementById('surpriseMsg');
+    msg.classList.toggle('show');
+    spawnHearts(16);
+  }
+
+  // ── HEARTS SPAWN ──
+  const HEARTS = ['❤️','🌸','💕','💗','🌹','✨','💖'];
+  function spawnHearts(n) {
+    for (let i = 0; i < n; i++) {
+      setTimeout(() => {
+        const h = document.createElement('div');
+        h.className = 'heart-float';
+        h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
+        h.style.left = Math.random()*100 + 'vw';
+        h.style.bottom = '-2rem';
+        const dur = 3 + Math.random()*4;
+        h.style.animationDuration = dur + 's';
+        h.style.fontSize = (1 + Math.random()*1.5) + 'rem';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), dur*1000);
+      }, i * 120);
+    }
+  }
+
+  // ── PETAL CANVAS ──
+  const canvas = document.getElementById('petals-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  const PETAL_COLORS = ['#f2789f','#fcd5ce','#e8c4a2','#c9456a','#ffb3c6'];
+  const petals = Array.from({length:28}, () => ({
+    x: Math.random()*window.innerWidth,
+    y: Math.random()*window.innerHeight - window.innerHeight,
+    r: 5 + Math.random()*8,
+    vx: (Math.random()-0.5)*0.6,
+    vy: 0.4 + Math.random()*0.9,
+    angle: Math.random()*Math.PI*2,
+    va: (Math.random()-0.5)*0.02,
+    color: PETAL_COLORS[Math.floor(Math.random()*PETAL_COLORS.length)],
+    opacity: 0.3 + Math.random()*0.5,
+  }));
+
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+    ctx.globalAlpha = p.opacity;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.r, p.r*0.55, 0, 0, Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animatePetals() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.angle += p.va;
+      if (p.y > H + 20) { p.y = -20; p.x = Math.random()*W; }
+      drawPetal(p);
+    });
+    requestAnimationFrame(animatePetals);
+  }
+  animatePetals();
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+  // Spawn a few hearts on page load
+  setTimeout(() => spawnHearts(8), 2500);
+  setInterval(() => spawnHearts(2), 7000);
+</script>
+</body>
+</html>
